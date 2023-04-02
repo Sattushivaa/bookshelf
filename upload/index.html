@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Upload book</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+  
+	<link rel="stylesheet" type="text/css" href="../login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../login/css/main.css">
+
+</head>
+<body>
+	
+  <script src="../utils/loader.js"></script>
+  <script src="../utils/notif.js"></script>
+  
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img id="preview">
+				</div>
+
+				<form class="login100-form validate-form">
+					<span class="login100-form-title">
+						Upload a book
+					</span>
+
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+					  
+	<input required id="bookname" class="input100" type="text" placeholder="Title">
+	
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					
+					
+
+					<div class="wrap-input100">
+
+	<input id="bookauthor" class="input100" type="text" placeholder="Author">
+	
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					
+					
+					
+					
+					
+
+					<div class="wrap-input100">
+						<input id="bookcost" class="input100" type="text" placeholder="Cost">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					
+					
+					<div class="wrap-input100">
+					  
+					  <input style="display: none" id="imageup" type="file" name="" id="">
+
+						<button id="filebtn" onclick="imageup.click()" class="input100" type="button" name="pass" text="hello" >Select a file</button>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					
+					
+					<div class="container-login100-form-btn">
+						<button id="sellbtn" class="login100-form-btn">
+							Sell
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<script src="upload.js">upload.js</script>
+
+</body>
+</html>

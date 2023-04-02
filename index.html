@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="utils/loader.js"></script>
+
+  <script src="utils/notif.js"></script>
+
+  <title>Book Shelf</title>
+  
+  <!-- HTML -->
+  
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <br><br><br>
+    <h1 class="brand">Book Shelf</h1>
+    <div class="mobile quote">
+      The books books you love <br>
+      In affordable prices
+    </div>
+  </header>
+  
+  <nav>
+    <span data-for="bookpane" class="navitem active">Books</span>
+    <span data-for="sellingspane" class="navitem">Sellings</span>
+    <span data-for="cartpane" class="navitem">🛒Cart</span>
+    <span data-for="accountpane" class="navitem">Account</span>
+  </nav><br>
+  
+  
+  
+  
+  <section id="bookpane">
+    
+    <div id="booksearch">
+      <input type="text" placeholder="search a book" id="searchbookname">
+      <button onclick="searchbook()">GO</button>
+    </div><br><br>
+    
+    
+    
+    <br><br><br>
+  </section>
+  
+
+
+  <section id="sellingspane">
+    
+    <button onclick="tosellbook()" id="sellbookbtn">sell a book</button>
+  </section>
+  
+  
+  <section id="cartpane">
+    
+  </section>
+  
+  <section id="accountpane">
+    <div id="accountlogo">
+      <div class="logo">S</div><br>
+      Satyam Bharti
+    </div>
+    <br>
+    <button> ⚔️ Sign out</button> 
+    <button> delete account </button> 
+    <button> ⚔️ Sign out</button> 
+  </section>
+  
+  <section id="bookdetailpane">
+    <button class="back" onclick="navitem[0].click()">back</button><br><br><br>
+    
+    <img class="bookcover" src="" alt="">
+    <div class="details"><br>
+      <h3 class="bookname" id="showbook_name">You Can Win</h3>
+      author : <span id="showbook_author">Shiv Khera</span><br>
+      cost : <span id="showbook_cost">₹500</span><br>
+      sold by : <span id="showbook_by">dineshkumar@07</span><br>
+      from : <span id="showbook_from">khera gadai, thanabhawan, shamli, uttar pradesh</span>
+    </div>
+    <div><br>
+      <button><i>+</i> Add to Cart</button>
+      <button><i>💶</i> Buy</button>
+      <!-- <button><i>📜</i> Comment</button> -->
+    </div>
+    <br><br><br>
+  </section>
+  
+  
+
+
+
+  <footer>
+    Book Shelf <br>
+    a web application by Shivam Bharti <br>
+    in 2023 <br> 
+    as a project
+  </footer>
+
+  <!-- Project -->
+  <script src="main.js"></script>
+</body>
+</html>
