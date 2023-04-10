@@ -4,8 +4,10 @@
   user-select: none;
 }
 body {
-    font-size: 15pt;
+  font-size: 15pt;
+  position: relative;
 }
+
 button>i {
   float: left;
   color : #2E402F;
@@ -249,7 +251,15 @@ div.book:hover>.details {
   border: none;
   border-radius: 5px 5px 5px 0px;
 }
-
+#cartpane {
+  padding: 10px;
+}/*
+.cartitem {
+  padding: 10px;
+  margin: 10px;
+  border: 2px solid #979797;
+  background: #E5E5E5;
+ } */
 
 
 
@@ -262,5 +272,12 @@ div.book:hover>.details {
     display: inline-block;
     height: inherit;
     max-width: 300px;
+  }
+}
+
+@media screen and (min-width : 500px){
+  #cartpane {
+    width: 50vw;
+    margin-left: 25vw;
   }
 }

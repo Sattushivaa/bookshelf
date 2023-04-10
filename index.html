@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
 
   <script src="utils/loader.js"></script>
 
@@ -31,8 +32,8 @@
   <nav>
     <span data-for="bookpane" class="navitem active">Books</span>
     <span data-for="sellingspane" class="navitem">Sellings</span>
-    <span data-for="cartpane" class="navitem">🛒Cart</span>
-    <span data-for="accountpane" class="navitem">Account</span>
+    <span onclick="getCartInfo()" data-for="cartpane" class="navitem">🛒Cart</span>
+    <span onclick="getUserInfo()" data-for="accountpane" class="navitem">Account</span>
   </nav><br>
   
   
@@ -60,17 +61,23 @@
   
   <section id="cartpane">
     
+    
+    <link rel="stylesheet" href="utils/bootstrap@5.2.0.min.css">
+    <link rel="stylesheet" href="utils/chartist.min.css">
+    
+    
+
   </section>
   
   <section id="accountpane">
     <div id="accountlogo">
       <div class="logo">S</div><br>
-      Satyam Bharti
+      <h2>Welcome Satyam Bharti</h2>
+      <em>SatyamBharti@TeraBaap</em>
     </div>
     <br>
     <button> ⚔️ Sign out</button> 
     <button> delete account </button> 
-    <button> ⚔️ Sign out</button> 
   </section>
   
   <section id="bookdetailpane">
@@ -85,7 +92,7 @@
       from : <span id="showbook_from">khera gadai, thanabhawan, shamli, uttar pradesh</span>
     </div>
     <div><br>
-      <button><i>+</i> Add to Cart</button>
+      <button onclick="addToCart(window.activebook_id)"><i>+</i> Add to Cart</button>
       <button><i>💶</i> Buy</button>
       <!-- <button><i>📜</i> Comment</button> -->
     </div>
@@ -104,6 +111,12 @@
   </footer>
 
   <!-- Project -->
+  
+  <script src="utils/dom.js"></script>
   <script src="main.js"></script>
+  
+  <script>
+    ld.unload()
+  </script>
 </body>
 </html>

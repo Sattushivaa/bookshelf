@@ -1,6 +1,9 @@
-const MongoClient = require("mongodb").MongoClient;
+const mongo = require("mongodb");
+const MongoClient = mongo.MongoClient;
 const url = 'mongodb+srv://satyambhartijnv0:Password1@cluster0.uxj2lag.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(url);
+
+const log=(...txt)=>console.log(...txt);
 
 const ws = require("ws");
 const server = new ws.Server({ port: 8080 });
@@ -22,7 +25,9 @@ server.on("connection", (client) => {
         if (data.type == "bookupload") uploadBook(data,client);
         if (data.type == 'findbook') findBook(data,client);
         if (data.type == "getcart") getcart(data,client);
+        if (data.type == "getcartpreload") getcartpreload(data,client);
         if (data.type == "addtocart") handleaddtocart(data,client);
+		if (data.type == "getuserinfo") handlegetuserinfo(data,client);
     }
 })
 
@@ -131,9 +136,14 @@ var myquery = { address: "Valley 345" };
 */
 
 async function handleaddtocart(data,wbclient){
+log("adding to cart");
     let profile = await client.db("userdb").collection("profile").findOne({username : data.username});
 	let cart = profile.cart;
+log("got cart of type "+ typeof cart);
+debugger;
 	cart[cart.length] = data.bookid;
+log("cart is : "+ cart);
+debugger;
 	await client.db("userdb").collection("profile").updateOne({
 	username : data.username
 	},{ $set : {
@@ -142,24 +152,50 @@ async function handleaddtocart(data,wbclient){
 	wbclient.send(JSON.stringify({
 		type : "success",
 		desc : "added to cart",
-		cart : cart.push(data.bookid)
+		cart : cart
 	}))
 }
 
 //========================================================
 
 async function getcart(data,wbclient){
+	console.log("getting cart info for "+data.username);
 	let profile = await client.db("userdb").collection("profile").findOne({ username : data.username });
 	let cart = profile.cart;
+	console.log("got cart");
+	log("cart is : "+ cart);
 	let books = [];
+	console.log("adding books in array");
 	for(let i=0;i<cart.length;i++){
-		let book = await client.db("bookdb").collection("books").findOne({ _id : cart[i]});
-		books.push(book);
+		console.log(" i is : "+i);
+		let book = await client.db("bookdb").collection("books").findOne({ _id : new mongo.ObjectId(cart[i])  });
+		console.log("book is : "+book);
+		books[books.length] = book;
+		console.log("books are : "+books);
 	}
+	console.log("sending information");
 	wbclient.send(JSON.stringify({
 		type : "cartitems",
 		items : books
 	}))
+}
+
+
+//============================================================
+
+async function getcartpreload(){
+	
+}
+
+//============================================================
+
+async function handlegetuserinfo(data,wbclient){
+	let user = await client.db("userdb").collection("users").findOne({username :data.username });
+	let profile = await client.db("userdb").collection("profile").findOne({username:data.username});
+	let obj = Object.assign(user,profile);
+	delete obj.password ;
+	obj.type = "userinfo";
+	wbclient.send(JSON.stringify(obj));	
 }
 
 //================================================================================================
