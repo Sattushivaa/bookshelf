@@ -1,6 +1,6 @@
 let ld = new Loader('loading');
 ld.load();
-const server = new WebSocket('ws://localhost:8080');
+const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
 server.onopen =()=>{
   ld.discard()
 }

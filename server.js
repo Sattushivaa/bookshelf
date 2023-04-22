@@ -6,7 +6,7 @@ const ws = require("ws");
 const server = new ws.Server({ port: 8080 });
 
 async function init() {
-    await client.connect();
+    await client.connect(); 
 }
 
 //============================================================================================
@@ -23,6 +23,7 @@ server.on("connection", (client) => {
         if (data.type == 'findbook') findBook(data,client);
         if (data.type == "getcart") getcart(data,client);
         if (data.type == "addtocart") handleaddtocart(data,client);
+        if (data.type == "getcartpreload") handlegetcartpreload(data,client);
     }
 })
 

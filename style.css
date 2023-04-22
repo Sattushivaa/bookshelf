@@ -260,7 +260,19 @@ div.book:hover>.details {
   border: 2px solid #979797;
   background: #E5E5E5;
  } */
-
+#buybooknowpane {
+  padding: 10px;
+  text-align : center;
+}
+#btnbuynow {
+  background: greenyellow;
+  width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+}
+#buybooknowpane img {
+  max-width: 90vw;
+}
 
 
 @media screen and (orientation : landscape){
@@ -279,5 +291,12 @@ div.book:hover>.details {
   #cartpane {
     width: 50vw;
     margin-left: 25vw;
+  }
+  div.mobile.quote {
+    padding: 10vw;
+    font-size: 50px;
+  }
+  h1.brand {
+    font-size: 100px;
   }
 }

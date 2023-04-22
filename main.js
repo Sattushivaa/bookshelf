@@ -2,10 +2,13 @@
 let ld = new Loader('loading bookshelf');
 ld.load();
 let notif = new Notif();
-const server = new WebSocket('ws://localhost:8080');
+const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
 server.onopen =()=>ld.discard();
 const navitem = document.getElementsByClassName('navitem');
 const panes = document.querySelectorAll('section[id*="pane"]');
+
+window.cartaction = "add";
+
 
 // ==========================================
 
@@ -40,7 +43,8 @@ for(let i=0;i<navitem.length;i++){
 navitem[0].click();
 
 function showbook(el){
-  let img = el.getElementsByTagName('img')[0];
+  window.activebookelement = el;
+  // let img = el.getElementsByTagName('img')[0];
   //console.log(img.src);
   document.getElementById('bookpane').style.display = 'none' ;
   document.getElementById('bookdetailpane').style.display = 'block' ;
@@ -51,8 +55,28 @@ function showbook(el){
   showbook_name.innerText = el.dataset.title;
   showbook_from.innerText = el.dataset.from;
   window.activebook_id = el.dataset._id;
+  if (el.dataset.incart!=null && el.dataset.incart!="undefined" && el.dataset.incart!="null"){
+    //console.log(el.dataset.incart);
+    btnaddtocart.innerText = "remove from cart";
+    window.cartaction = "remove"
+  } else {
+    btnaddtocart.innerText = "add to cart";
+    window.cartaction = "add"
+  }
 }
 
+
+function buybooknow(book){
+  //console.log(book);
+  //document.getElementById('bookpane').click()
+  document.getElementById('cartpane').style.display = 'none' ;
+  document.getElementById('buybooknowpane').style.display = 'block' ;
+  buying_cost.innerText = book.cost;
+  buying_title.innerText = book.title;
+  buying_img.src = book.cover;
+  buying_delivery_charge = parseFloat(book.cost)*10/100 + ' INR';
+  
+}
 // ====================================
 
 function tosellbook(){
@@ -62,6 +86,13 @@ function tosellbook(){
 // ====================================
 
 function searchbook(){
+  if (!loginned()){ gotologin(); return };
+  // getcartpreload ================
+  server.send(JSON.stringify({
+    type : "getcartpreload",
+    username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata'))?.username
+  }))
+  //=========================
   server.send(JSON.stringify({
     type : 'findbook',
     keyword : searchbookname.value
@@ -76,19 +107,38 @@ function searchbook(){
 
 function addToCart(id){
   if (!loginned()){ gotologin(); return };
+  if (window.cartaction=="remove") { removefromcart(id); return; }
   server.send(JSON.stringify({
     type : "addtocart",
     bookid : id,
     username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
   }));
+  //getCartInfo(true);
+  btnaddtocart.innerText = "remove from cart";
+  window.cartaction = 'remove';
   notif.text = 'adding to cart';
   notif.permanent = true;
+  notif.show();
+}
+
+function removefromcart(id){
+  server.send(JSON.stringify({
+    type : "removefromcart",
+    bookid : id,
+    username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
+  }));
+  //getCartInfo(true);
+  notif.text = 'removing from cart';
+  notif.permanent = true;
+  btnaddtocart.innerText = "add to cart";
+  window.cartaction='add';
   notif.show();
 }
 
 // ===========================================
 
 function getUserInfo(){
+  if (!loginned()){ gotologin(); return };
   server.send(JSON.stringify({
     type : 'getuserinfo',
     username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
@@ -113,7 +163,8 @@ function getCartInfo(preload=false){
 // =====================================
 
 server.onmessage =  (e) => {
-  alert(e.data);
+  //alert(e.data);
+  notif.hide();
   let data = JSON.parse(e.data);
   if(data.preload){
     handlePreloads(data);
@@ -122,7 +173,7 @@ server.onmessage =  (e) => {
   notif.hide();
   if(data.type=='searchresults') handlesearchresults(data);
   if(data.type=='cartitems') handlecartitems(data);
-  if(data.type=='userinfo') alert(JSON.stringify(data));
+  if(data.type=='userinfo') handleuserinfo(data);
 }
 
 // ===========================================
@@ -141,9 +192,10 @@ function handlesearchresults(data){
         by: res.by,
         author: res.author,
         from: res.from,
-        _id: res._id
+        _id: res._id,
+        incart : window._cart.find((v)=>v==res._id) || null
       })
-      console.log(res.from);
+      //console.log(res.from);
       let book = `
         <div class="details">
           ${res.title} <br> ${res.cost}
@@ -162,23 +214,87 @@ function handlecartitems(data){
   for (let i=0;i<old_itms.length;i++){
     old_itms[i].remove();
   }
-  data.items.map((book)=>{
+  data.items.forEach((book)=>{
+    if (book == null) return ;
     let container = DOM.create('div');
     container.className = 'cartitem';
     cartpane.appendChild(container);
     let ctt = `
         <div class="card">
-  <!--div class="card-header">
+  <!--div class="card-header"> 
     Featured
   </div-->
   <div class="card-body">
     <h5 class="card-title">${book.title}</h5>
     <p class="card-text">by ${book.author}</p>
-    <a href="#" class="btn btn-dark">Go somewhere</a>
+    <a href="#" class="btn btnbuynow btn-dark">Buy Now</a>
   </div>
 </div>
     `;
     container.innerHTML = ctt;
-    Object.assign(container.dataset,book);
+    let btn = document.querySelectorAll("a.btnbuynow");
+    btn = btn[btn.length-1];
+    //console.log(book);
+    btn.addEventListener("click",()=>buybooknow(book));
+    //Object.assign(container.dataset,book);
   })
+}
+
+
+
+
+//========================================================================================================================================
+
+function handlePreloads(data){
+  //alert(data);
+  if (data.cart!=null) {
+    window._cart = data.cart;
+    let el = window.activebookelement;
+    if (!el) {
+      //console.log("el is "+ el);
+      return;
+    };
+    let incart = false;
+    for(let i=0;i<window._cart.length;i++){
+      if(window._cart[i] == el.dataset._id) incart = true;
+    }
+    if (incart){
+      btnaddtocart.innerText = "remove from cart";
+      window.cartaction = "remove";
+    } else {
+      btnaddtocart.innerText = "add to cart";
+      window.cartaction = "add";
+    }
+  }
+}
+
+function serviceUnavailable(){
+  notif.hide();
+  notif.text = 'service unavailable';
+  notif.permanent = false;
+  notif.show();
+}
+
+function signout(){
+  localStorage.clear();
+  location.reload();
+}
+
+function deleteaccount(){
+  let confirmation = confirm('Do you really want to delete your account ? this action cannot be reversed.');
+  if (!confirmation) return;
+  server.send(JSON.stringify({
+    type : 'deleteaccount',
+    username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
+  }));
+  notif.text = 'deleting account';
+  notif.permanent = true;
+  notif.show();
+  setTimeout(signout,1000);
+}
+
+function handleuserinfo(data){
+  console.log(data);
+  account_name.innerText = 'Welcome ' + data.name;
+  account_username.innerText = data.username;
 }

@@ -28,6 +28,7 @@ server.on("connection", (client) => {
         if (data.type == "getcartpreload") getcartpreload(data,client);
         if (data.type == "addtocart") handleaddtocart(data,client);
 		if (data.type == "getuserinfo") handlegetuserinfo(data,client);
+        if (data.type == "removefromcart") removefromcart(data,client);
     }
 })
 
@@ -156,6 +157,32 @@ debugger;
 	}))
 }
 
+//======================================================================================
+
+async function removefromcart(data,wbclient){
+    let profile = await client.db("userdb").collection("profile").findOne({username : data.username});
+	let cart = profile.cart;
+    let bookid = data.bookid;
+    let index = cart.indexOf(bookid);
+    // cart = cart.splice(index,1);
+    delete cart[index];
+    log(cart);
+    await client.db("userdb").collection("profile").updateOne({
+        username : data.username
+    },{
+        $set : { cart : cart }
+    });
+    wbclient.send(JSON.stringify({
+        type : "success",
+        desc : "successfully deleted one item from the cart"
+    }));
+    wbclient.send(JSON.stringify({
+        type : "success",
+        preload : true,
+        cart : cart
+    }));
+}
+
 //========================================================
 
 async function getcart(data,wbclient){
@@ -183,8 +210,15 @@ async function getcart(data,wbclient){
 
 //============================================================
 
-async function getcartpreload(){
-	
+async function getcartpreload(data,wbclient){
+	let profile = await client.db("userdb").collection("profile").findOne({username:data.username});
+    let cart = profile.cart;
+    wbclient.send(JSON.stringify({
+        type : "success",
+        desc : "cart preload info",
+        preload : true,
+        cart : cart
+    }))
 }
 
 //============================================================

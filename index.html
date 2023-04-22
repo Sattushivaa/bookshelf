@@ -8,7 +8,7 @@
 
   <script src="utils/loader.js"></script>
 
-  <script src="utils/notif.js"></script>
+  <script src="utils/notif.js"></script> 
 
   <title>Book Shelf</title>
   
@@ -52,6 +52,23 @@
   </section>
   
 
+  <section id="buybooknowpane">
+    <button class="back" onclick="navitem[2].click()">back</button><br><br><br>
+    <img src="" id="buying_img"><br>
+    item : book <br>
+    title : <span id="buying_title"></span>
+    <br>
+    quantity : 1 <br>
+    cost : <span id="buying_cost"></span><br>
+    delivery charge : <span id="buying_delivery_charge"></span><br>
+    <select>
+      <option value="cash on delivery">cash on delivery</option>
+    </select><br>
+    <button onclick="serviceUnavailable()" id="btnbuynow">BUY NOW</button>
+  </section>
+
+
+
 
   <section id="sellingspane">
     
@@ -72,12 +89,12 @@
   <section id="accountpane">
     <div id="accountlogo">
       <div class="logo">S</div><br>
-      <h2>Welcome Satyam Bharti</h2>
-      <em>SatyamBharti@TeraBaap</em>
+      <h2 id="account_name">Welcome Satyam Bharti</h2>
+      <em id="account_username">SatyamBharti@TeraBaap</em>
     </div>
     <br>
-    <button> ⚔️ Sign out</button> 
-    <button> delete account </button> 
+    <button onclick="signout()"> ⚔️ Sign out</button> 
+    <button onclick="deleteaccount()"> delete account </button> 
   </section>
   
   <section id="bookdetailpane">
@@ -92,7 +109,7 @@
       from : <span id="showbook_from">khera gadai, thanabhawan, shamli, uttar pradesh</span>
     </div>
     <div><br>
-      <button onclick="addToCart(window.activebook_id)"><i>+</i> Add to Cart</button>
+      <button id="btnaddtocart" onclick="addToCart(window.activebook_id)"><i>+</i> Add to Cart</button>
       <button><i>💶</i> Buy</button>
       <!-- <button><i>📜</i> Comment</button> -->
     </div>
@@ -116,7 +133,7 @@
   <script src="main.js"></script>
   
   <script>
-    ld.unload()
+    //ld.unload()
   </script>
 </body>
 </html>
