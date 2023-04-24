@@ -87,6 +87,12 @@ function tosellbook(){
 
 function searchbook(){
   if (!loginned()){ gotologin(); return };
+  if (dummybooknames.some(val=>new RegExp(searchbookname.value,'ig').test(val))){
+    let reg = new RegExp(searchbookname.value,'ig');
+    let bks = dummybooks.filter(b=>b.title.match(reg));
+    handlesearchresults({results : bks});
+    return;
+  }
   // getcartpreload ================
   server.send(JSON.stringify({
     type : "getcartpreload",
@@ -107,6 +113,7 @@ function searchbook(){
 
 function addToCart(id){
   if (!loginned()){ gotologin(); return };
+  if (isadummyid(id)) return addtodummycart(id);
   if (window.cartaction=="remove") { removefromcart(id); return; }
   server.send(JSON.stringify({
     type : "addtocart",
@@ -151,6 +158,14 @@ function getUserInfo(){
 
 function getCartInfo(preload=false){
   if (!loginned()){ gotologin(); return };
+  
+  let old_itms = document.querySelectorAll('.cartitem');
+  for (let i=0;i<old_itms.length;i++){
+    old_itms[i].remove();
+  }
+  
+  handlecartitems({items:bkdummy.getBooks()});
+  
   server.send(JSON.stringify({
     type : preload?'getcartpreload':'getcart',
     username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
@@ -193,7 +208,8 @@ function handlesearchresults(data){
         author: res.author,
         from: res.from,
         _id: res._id,
-        incart : window._cart.find((v)=>v==res._id) || null
+        dummy : res.dummy,
+        incart : window._cart?.find((v)=>v==res._id) || null
       })
       //console.log(res.from);
       let book = `
@@ -210,10 +226,7 @@ function handlesearchresults(data){
 //===========================================
 
 function handlecartitems(data){
-  let old_itms = document.querySelectorAll('.cartitem');
-  for (let i=0;i<old_itms.length;i++){
-    old_itms[i].remove();
-  }
+  
   data.items.forEach((book)=>{
     if (book == null) return ;
     let container = DOM.create('div');
