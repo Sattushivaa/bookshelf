@@ -2,7 +2,10 @@
 let ld = new Loader('loading bookshelf');
 ld.load();
 let notif = new Notif();
-const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
+//const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
+
+const server = new WebSocket('ws://localhost:8080',['mainserver']);
+
 server.onopen =()=>ld.discard();
 const navitem = document.getElementsByClassName('navitem');
 const panes = document.querySelectorAll('section[id*="pane"]');
@@ -31,6 +34,7 @@ for(let i=0;i<navitem.length;i++){
       panes[j].classList.add('paneglobal');
     }
     let attr = navitem[i].getAttribute('data-for');
+    if (attr=='sellingspane') initiateSellingsPane();
     let d = document.getElementById(attr);
     d.style.display = 'block';
     
@@ -55,7 +59,8 @@ function showbook(el){
   showbook_name.innerText = el.dataset.title;
   showbook_from.innerText = el.dataset.from;
   window.activebook_id = el.dataset._id;
-  if (el.dataset.incart!=null && el.dataset.incart!="undefined" && el.dataset.incart!="null"){
+  alert(el.dataset.incart);
+  if (el.dataset.incart!==null && el.dataset.incart!=="undefined" && el.dataset.incart!=="null" && el.dataset.incart!="false"){
     //console.log(el.dataset.incart);
     btnaddtocart.innerText = "remove from cart";
     window.cartaction = "remove"
@@ -189,6 +194,7 @@ server.onmessage =  (e) => {
   if(data.type=='searchresults') handlesearchresults(data);
   if(data.type=='cartitems') handlecartitems(data);
   if(data.type=='userinfo') handleuserinfo(data);
+  if(data.type=='myuploadbook') handleMyUploads(data);
 }
 
 // ===========================================
@@ -310,4 +316,30 @@ function handleuserinfo(data){
   console.log(data);
   account_name.innerText = 'Welcome ' + data.name;
   account_username.innerText = data.username;
+}
+function initiateSellingsPane(){
+  if (!loginned()){ gotologin(); return};
+  myuploadscont.innerHTML = '';
+}
+function viewMyUploads(){
+  notif.text = 'waiting for response';
+  notif.permanent = true;
+  notif.show();
+  server.send(JSON.stringify({
+    type : 'viewmyuploads',
+    username : JSON.parse(localStorage.getItem('bkshelf_0.0.1_userdata')).username
+  }))
+}
+function handleMyUploads(data){
+  let book = data.book;
+  let code = `
+  <div class='myuploadbook'>
+    <img src='${book.cover}' />
+    <div>
+      <h2>${book.title}</h2>
+      written by ${book.author}
+    </div>
+  </div>
+  `;
+  myuploadscont.innerHTML+=code;
 }
