@@ -39,11 +39,65 @@ let dummybooks = [
 },{
     title: 'Physics Part 2 class 11',
     cover: 'books/ph2.jpg',
-    author: 'R. S. Agrawal',
+    author: 'NCERT',
     cost: '₹ 920',
     by: "sureshkumar@8363",
     from: '53-A Chanduli Nagar, Delhi',
     _id: 'dummy005',
+    dummy: true
+},{
+    title: 'Maths Concept King',
+    cover: 'books/conceptking.jpeg',
+    author: 'Gagan Pratap Sir',
+    cost: '₹ 920',
+    by: "sureshkumar@8363",
+    from: '53-A Chanduli Nagar, Delhi',
+    _id: 'dummy006',
+    dummy: true
+},{
+    title: 'Indian Economy',
+    cover: 'books/indianeconomy.jpeg',
+    author: 'StudyIQ Publications',
+    cost: '₹ 920',
+    by: "sureshkumar@8363",
+    from: '53-A Chanduli Nagar, Delhi',
+    _id: 'dummy007',
+    dummy: true
+},{
+    title: 'Fundamentals Of Geography',
+    cover: 'books/fog.jpeg',
+    author: 'studyIQ publications',
+    cost: '₹ 920',
+    by: "sureshkumar@8363",
+    from: '53-A Chanduli Nagar, Delhi',
+    _id: 'dummy008',
+    dummy: true
+},{
+    title: 'Tell Me A Story',
+    cover: 'books/tellmeastory.jpeg',
+    author: 'Ravinder Singh',
+    cost: '₹ 199',
+    by: "RameshSingh53738",
+    from: '53-A Nagpur, Gujrat',
+    _id: 'dummy009',
+    dummy: true
+},{
+    title: 'Harry Potter and the Goblet of Fire',
+    cover: 'books/hpandgof.jpeg',
+    author: 'J. K. Rowling',
+    cost: '₹ 799',
+    by: "sureshkumar@8363",
+    from: '53-A Chanduli Nagar, Delhi',
+    _id: 'dummy010',
+    dummy: true
+},{
+    title: 'The Greatest Short Stories',
+    cover: 'books/shortstoryleo.jpeg',
+    author: 'Leo Tolstoy',
+    cost: '₹ 620',
+    by: "sureshkumar@8363",
+    from: '53-A Chanduli Nagar, Delhi',
+    _id: 'dummy011',
     dummy: true
 }]
 
