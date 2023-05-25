@@ -2,9 +2,9 @@
 let ld = new Loader('loading bookshelf');
 ld.load();
 let notif = new Notif();
-//const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
+const server = new WebSocket('wss://teal-erratic-exoplanet.glitch.me',['mainserver']);
 
-const server = new WebSocket('ws://localhost:8080',['mainserver']);
+//const server = new WebSocket('ws://localhost:8080',['mainserver']);
 
 server.onopen =()=>ld.discard();
 const navitem = document.getElementsByClassName('navitem');
