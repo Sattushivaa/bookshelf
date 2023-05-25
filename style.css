@@ -140,6 +140,14 @@ div.book:hover>.details {
   color: white;
   font-size: 20px;
 }
+#viewmyuploadsbtn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 10px;
+  border: none;
+  background: blue;
+  color: white;
+}
 #accountlogo {
   text-align: center;
   background: white;
@@ -273,6 +281,24 @@ div.book:hover>.details {
 #buybooknowpane img {
   max-width: 90vw;
 }
+#myuploadscont {
+  padding: 20px;
+}
+.myuploadbook {
+  padding: 10px;
+  background: #EDEDED;
+}
+.myuploadbook::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.myuploadbook img {
+  max-height: 150px;
+  float: right;
+}
+
+
 
 
 @media screen and (orientation : landscape){
